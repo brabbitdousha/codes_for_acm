@@ -1,0 +1,27 @@
+map pair用法
+ map< pair<string,string> ,int >a;
+   if(a[make_pair(s1,s2)] == 0)
+
+
+int main()
+{
+	map<char,int> ma;
+	ma['A']=0;ma['B']=0;ma['C']=0;	ma['D']=0;
+		ma['E']=0;	ma['F']=0;	ma['G']=0;	ma['H']=0;
+			ma['I']=0;	ma['J']=0;	ma['K']=0;	ma['L']=0;
+				ma['M']=0;	ma['N']=0;	ma['O']=0;ma['P']=0;
+		ma['Q']=0;	ma['R']=0;	ma['S']=0;	ma['T']=0;	ma['U']=0;
+			ma['V']=0;ma['W']=0;ma['X']=0;	ma['Y']=0;	ma['Z']=0;
+	string a;
+	getline(cin,a);
+	for(int i=0;i<a.length();i++)
+	{    ma[a[i]]++;}
+	map<char, int>::const_iterator it; 
+	for (it = ma.begin(); it != ma.end(); ++it)
+        cout << it->first << "=" << it->second << endl; 
+	 return 0;
+}
+ map与unordered_map区别及使用
+map: #include < map > 内置红黑树
+unordered_map: #include < unordered_map > 哈希
+如果只是标个号，还是用unordered_map把。。不然数进了map，是会自动排序的。。就很慢

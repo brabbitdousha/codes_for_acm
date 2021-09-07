@@ -1,0 +1,162 @@
+题目描述
+
+恰逢 HH H国国庆，国王邀请n nn 位大臣来玩一个有奖游戏。首先，他让每个大臣在左、右手上面分别写下一个整数，国王自己也在左、右手上各写一个整数。然后，让这 nnn 位大臣排成一排，国王站在队伍的最前面。排好队后，所有的大臣都会获得国王奖赏的若干金币，每位大臣获得的金币数分别是：排在该大臣前面的所有人的左手上的数的乘积除以他自己右手上的数，然后向下取整得到的结果。
+
+国王不希望某一个大臣获得特别多的奖赏，所以他想请你帮他重新安排一下队伍的顺序，使得获得奖赏最多的大臣，所获奖赏尽可能的少。注意，国王的位置始终在队伍的最前面。
+输入格式
+
+第一行包含一个整数n nn，表示大臣的人数。
+
+第二行包含两个整数 aaa和 bbb，之间用一个空格隔开，分别表示国王左手和右手上的整数。
+
+接下来 nn n行，每行包含两个整数a aa 和 bbb，之间用一个空格隔开，分别表示每个大臣左手和右手上的整数。
+输出格式
+
+一个整数，表示重新排列后的队伍中获奖赏最多的大臣所获得的金币数。
+输入输出样例
+输入 #1
+
+3 
+1 1 
+2 3 
+7 4 
+4 6 
+
+输出 #1
+
+2
+
+说明/提示
+
+【输入输出样例说明】
+
+按1 11、222、333 这样排列队伍，获得奖赏最多的大臣所获得金币数为 222；
+
+按 111、333、222 这样排列队伍，获得奖赏最多的大臣所获得金币数为2 22；
+
+按 222、111、333 这样排列队伍，获得奖赏最多的大臣所获得金币数为 222；
+
+按2 22、333、11 1这样排列队伍，获得奖赏最多的大臣所获得金币数为9 99；
+
+按 333、111、22 2这样排列队伍，获得奖赏最多的大臣所获得金币数为 222；
+
+按3 33、222、111 这样排列队伍，获得奖赏最多的大臣所获得金币数为 999。
+
+因此，奖赏最多的大臣最少获得 22 2个金币，答案输出 222。
+
+【数据范围】
+
+对于 20%的数据，有 1≤n≤10,0<a,b<81≤ n≤ 10,0 < a,b < 81≤n≤10,0<a,b<8；
+
+对于 40%的数据，有1≤n≤20,0<a,b<8 1≤ n≤20,0 < a,b < 81≤n≤20,0<a,b<8；
+
+对于 60%的数据，有 1≤n≤1001≤ n≤1001≤n≤100；
+
+对于 60%的数据，保证答案不超过 10910^9109；
+
+对于 100%的数据，有 1≤n≤1,000,0<a,b<100001 ≤ n ≤1,000,0 < a,b < 100001≤n≤1,000,0<a,b<10000。
+
+NOIP 2012 提高组 第一天 第二题
+
+
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <string>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+int n, lens = 1, lenm = 1, lena = 1;
+int sum[10010] = {0, 1}, maxn[10010] = {0, 1}, ans[10010];
+
+struct tmp
+{
+    long long l, r;
+    bool operator < (const tmp x) const 
+    {
+            return l * r < x.l * x.r;
+    }
+}coin[1001];
+
+void muti(long long x)
+{
+    int tmp = 0;
+    for(int i = 1; i <= lens; i++)
+        sum[i] *= x;
+    for(int i = 1; i <= lens; i++)
+    {
+        tmp += sum[i];
+        sum[i] = tmp %10;
+        tmp /= 10;
+    }
+    while(tmp != 0)
+    {
+        lens++;
+        sum[lens] = tmp % 10;
+        tmp /= 10;
+    }
+}
+
+void cut(long long x)
+{
+    memset(ans, 0, sizeof(ans));
+    lena = lens;
+    int tmp = 0;
+    for(int i = lena; i >= 1; i--)
+    {
+        tmp *= 10;
+        tmp += sum[i];
+        if(tmp >= x)
+        {
+            ans[i] = tmp / x;
+            tmp %= x;
+        }
+    }
+    while(ans[lena] == 0)
+    {
+        if(lena == 1)
+            break;
+        lena--;
+    }
+}
+
+void max()
+{
+    if(lena > lenm)
+    {
+        for(int i = 1; i <= lena; i++)
+            maxn[i] = ans[i];
+        lenm = lena;
+    }
+    else if(lena == lenm)
+    {
+        for(int i = lena; i >= 1; i--)
+            if(maxn[i] < ans[i])
+            {
+                for(int j = 1; j <= lena; j++)
+                    maxn[j] = ans[j];
+                lenm = lena;
+                break;
+            }
+    }
+}
+
+int main()
+{
+//  freopen("game.in", "r", stdin);
+//  freopen("game.out", "w", stdout);
+    cin >> n;
+    cin >> coin[0].l >> coin[0].r;
+    for(int i = 1; i <= n; i++)
+        scanf("%d %d", &coin[i].l, & coin[i].r);
+    sort(coin + 1, coin + n + 1);
+    for(int i = 1; i <= n; i++)
+    {
+        muti(coin[i - 1].l);
+        cut(coin[i].r);
+        max();
+    }
+    for(int i = lenm; i >= 1; i--)
+        cout << maxn[i];
+}

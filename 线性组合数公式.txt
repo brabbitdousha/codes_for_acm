@@ -1,0 +1,4 @@
+  inv[1]=1;
+    for(int i=2;i<=200000;i++)inv[i]=((ll)(mod-mod/i)*(ll)inv[mod%i])%mod;
+   ll zhuhe=1;ll nn=n-1;
+   for(int i=1;i<=nn;i++)zhuhe=(zhuhe*(ll)(m-i+1)%mod*inv[i])%mod;   ////*C(m,nn);*////

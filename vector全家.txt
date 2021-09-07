@@ -1,0 +1,45 @@
+ max_element和min_element的用法
+
+首先，max_element和min_elemetn看字面意思是求最大值和最小值，这个确实是这个意思。不过，需要注意的是，他返回的是最大值（最小值）的地址，而非最大值（最小值）。对于一般数组的用法则是int pos = max_element(a, a + n) - a,min_element同理。对于vector则是int pos = max_element(v.begin(), v.end()) - v.begin().
+#include <algorithm>
+#include <iostream>
+vector 去重复元素
+ vector<ll>alls;
+alls.push_back(e[i].a);
+ sort(alls.begin(),alls.end());
+        alls.erase(unique(alls.begin(),alls.end()),alls.end());
+   a = lower_bound(alls.begin(),alls.end(),a) - alls.begin()+1;
+     b = lower_bound(alls.begin(),alls.end(),b) - alls.begin()+1;
+  得到标号。
+ vector<int> v(3);  
+    v[0]=2; //v[0]是第0个元素 
+    v[1]=7;  
+    v[2]=9;  
+    v.insert(v.begin(),8);//在最前面插入新元素。  
+    v.insert(v.begin()+2,1);//在迭代器中第二个元素前插入新元素  
+    v.insert(v.end(),3);//在向量末尾追加新元素。  
+ 
+int main()
+{
+    std::vector<double> v {1.0, 2.0, 3.0, 4.0, 5.0, 1.0, 2.0, 3.0, 4.0, 5.0};
+ 
+    std::vector<double>::iterator biggest = std::max_element(std::begin(v), std::end(v));
+    //or std::vector<double>::iterator biggest = std::max_element(v.begin(), v.end);
+ 
+    
+    std::cout << "Max element is " << *biggest<< " at position " <<std::distance(std::begin(v), biggest) << std::endl;
+    //另一方面，取最大位置也可以这样来写：
+    //int nPos = (int)(std::max_element(v.begin(), v.end()) - (v.begin());
+    //效果和采用distance(...)函数效果一致
+    //说明：max_element(v.begin(), v.end()) 返回的是vector<double>::iterator, 
+    //相当于指针的位置，减去初始指针的位置结果即为最大值得索引。
+ 
+    auto smallest = std::min_element(std::begin(v), std::end(v));
+    std::cout << "min element is " << *smallest<< " at position " <<std::distance(std::begin(v), smallest) << std::endl;
+}
+当然还有求和
+
+为了对vector中的所有元素求和，我们利用accmulate这个函数。
+
+头文件#include <numeric>。
+    int num=accumulate(va.begin(),va.end(),0); //求和

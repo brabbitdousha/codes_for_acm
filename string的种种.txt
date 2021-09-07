@@ -1,0 +1,25 @@
+string中提供的成员函数可以用来删除字符串中的字符，这里主要介绍erase方法
+erase方法原型
+1. basic_string & erase(size_type pos=0, size_type n=npos);
+
+即从给定起始位置pos处开始删除, 要删除字符的长度为n, 返回值修改后的string对象引用
+
+示例[1]
+
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main(){
+    string str = "hello c++! +++";
+    // 从位置pos=10处开始删除，直到结尾
+    // 即： " +++"
+    str.erase(10);
+    cout << '-' << str << '-' << endl;
+    // 从位置pos=6处开始，删除4个字符
+    // 即: "c++!"
+    str.erase(6, 4);
+    cout << '-' << str << '-' << endl;
+    return 0;
+}
+
