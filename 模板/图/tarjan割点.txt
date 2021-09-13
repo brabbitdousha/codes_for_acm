@@ -1,0 +1,52 @@
+tarjan¸îµã
+#include<bits/stdc++.h>
+using namespace std;
+const int N=100010;
+vector<int> G[N];
+int dfn[N],low[N];
+bool isge[N];
+int n,m;
+int tt;
+void tarjan(int u,int fa)
+{
+	dfn[u]=low[u]=++tt;
+	int child=0;
+	for(int i=0;i<G[u].size();i++)
+	{
+		int to=G[u][i];
+		if(!dfn[to])
+		{
+			tarjan(to,fa);
+			low[u]=min(low[u],low[to]);
+			if(low[to]>=dfn[u]&&u!=fa)
+			  isge[u]=1;
+			if(u==fa) child++;
+		}
+		low[u]=min(low[u],dfn[to]);
+	}
+	if(child>=2&&u==fa) isge[u]=1;
+}
+int main()
+{
+	memset(dfn,0,sizeof dfn);
+    tt=0;
+	scanf("%d %d",&n,&m);
+	for(int i=1;i<=m;i++)
+	{
+		int u,v;
+		scanf("%d %d",&u,&v);
+		G[u].push_back(v);
+		G[v].push_back(u);
+	}
+	for(int i=1;i<=n;i++)
+	{
+		if(dfn[i]==0) tarjan(i,i);
+	}  int ans=0;
+	for(int i=1;i<=n;i++) if(isge[i]) ans++;
+	printf("%d\n",ans);
+	for(int i=1;i<=n;i++)
+	{
+		if(isge[i]) printf("%d ",i);
+	}
+	return 0;
+}

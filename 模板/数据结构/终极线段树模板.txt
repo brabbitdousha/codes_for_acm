@@ -1,0 +1,194 @@
+1 x y z 区间加
+2 x y z 区间乘
+3 x y z 区间改
+4 x y z 区间每个数的z的次方相加
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<vector>
+#define ll long long
+using namespace std;
+const int maxn=100010;
+const int mod=10007;
+int n,m;
+struct node
+{
+	int l,r;
+	ll sum[3];
+	ll lz[3];
+}tree[maxn*4];
+void build(int i,int l,int r)
+{   
+	tree[i].l=l;
+	tree[i].r=r;
+	tree[i].sum[0]=tree[i].sum[1]=tree[i].sum[2]=0;
+	tree[i].lz[0]=tree[i].lz[2]=0;
+	tree[i].lz[1]=1;
+	if(l!=r)
+	{int mid=(l+r)>>1;
+	build(i<<1,l,mid);
+	build(i<<1|1,mid+1,r);
+    }
+}
+void push_down(int i,int len)
+{
+	int left=i<<1; int right=i<<1|1;
+	if(tree[i].lz[2])
+	{
+		tree[left].lz[2]=tree[right].lz[2]=tree[i].lz[2];
+		tree[left].lz[1]=tree[right].lz[1]=1;
+		tree[left].lz[0]=tree[right].lz[0]=0;
+		ll now=(tree[i].lz[2]*tree[i].lz[2]%mod)*tree[i].lz[2]%mod;
+		tree[left].sum[2]=now*(len-(len>>1))%mod;
+		tree[right].sum[2]=now*(len>>1)%mod;
+		
+		tree[left].sum[1]=(((tree[i].lz[2]*tree[i].lz[2])%mod)*(len-(len>>1))%mod)%mod;
+		tree[right].sum[1] =((tree[i].lz[2]*tree[i].lz[2]%mod)*(len>>1)%mod)%mod;
+ 
+		tree[left].sum[0]=tree[i].lz[2]*(len-(len>>1))%mod;
+		tree[right].sum[0]=tree[i].lz[2]*(len>>1)%mod;	
+		tree[i].lz[2]=0;
+	}
+	if(tree[i].lz[1]!=1)
+	{
+		tree[left].lz[1]=tree[left].lz[1]*tree[i].lz[1]%mod;
+		tree[right].lz[1]=tree[right].lz[1]*tree[i].lz[1]%mod;
+		if(tree[left].lz[0]) tree[left].lz[0]=tree[left].lz[0]*tree[i].lz[1]%mod;
+		if(tree[right].lz[0]) tree[right].lz[0]=tree[right].lz[0]*tree[i].lz[1]%mod;
+		ll now=(tree[i].lz[1]*tree[i].lz[1]%mod)*tree[i].lz[1]%mod;
+		
+		tree[left].sum[2]=tree[left].sum[2]*now%mod;
+		tree[right].sum[2]=tree[right].sum[2]*now%mod;
+		
+		 now=(tree[i].lz[1]*tree[i].lz[1]%mod);
+		tree[left].sum[1]=tree[left].sum[1]*now%mod;
+		tree[right].sum[1]=tree[right].sum[1]*now%mod;
+		
+		now=(tree[i].lz[1])%mod;
+		
+		tree[left].sum[0]=tree[left].sum[0]*now%mod;
+		tree[right].sum[0]=tree[right].sum[0]*now%mod;
+		
+		tree[i].lz[1]=1;
+	}
+	if(tree[i].lz[0])
+	{
+		tree[left].lz[0]+=tree[i].lz[0];
+		tree[right].lz[0]+=tree[i].lz[0];
+		
+		ll now=(tree[i].lz[0]*tree[i].lz[0]%mod)*tree[i].lz[0]%mod;
+		
+		tree[left].sum[2]=(tree[left].sum[2]+(tree[i].lz[0]*(tree[left].sum[1]+tree[i].lz[0]*tree[left].sum[0]%mod)%mod*3)%mod+(len-(len>>1))*now%mod)%mod;
+		tree[right].sum[2]=(tree[right].sum[2]+(tree[i].lz[0]*(tree[right].sum[1]+tree[i].lz[0]*tree[right].sum[0]%mod)%mod*3)%mod+(len>>1)*now%mod)%mod;
+		
+		now=(tree[i].lz[0]*tree[i].lz[0]%mod);
+		
+		tree[left].sum[1]=(tree[left].sum[1]+2*(tree[i].lz[0]*tree[left].sum[0]%mod)%mod+(len-(len>>1))*now)%mod;
+		tree[right].sum[1]=(tree[right].sum[1]+2*(tree[i].lz[0]*tree[right].sum[0]%mod)%mod+(len>>1)*now)%mod;
+		 now=tree[i].lz[0];
+		tree[left].sum[0]=(tree[left].sum[0]+(len-(len>>1))*now%mod)%mod;
+		tree[right].sum[0]=(tree[right].sum[0]+(len>>1)*now%mod)%mod;
+		
+		tree[i].lz[0]=0;
+	}
+}
+void push_up(int i)
+{
+	int l=i<<1,r=i<<1|1;
+	tree[i].sum[0]=(tree[l].sum[0]+tree[r].sum[0])%mod;
+	tree[i].sum[1]=(tree[l].sum[1]+tree[r].sum[1])%mod;
+	tree[i].sum[2]=(tree[l].sum[2]+tree[r].sum[2])%mod;
+}
+
+void updata(int i,int x,int l,int r,int c)
+{   //cout<<1<<endl;
+	int len=r-l+1;
+		if(tree[i].r<=r&&tree[i].l>=l)
+		{
+			if(x==2)
+			{   
+				tree[i].lz[2]=c;
+				tree[i].lz[1]=1;
+				tree[i].lz[0]=0;
+				tree[i].sum[0]=(c*(r-l+1))%mod;
+				tree[i].sum[1]=((c*c%mod)*(r-l+1))%mod;
+				tree[i].sum[2]=(((c*c%mod)*c)%mod*(r-l+1))%mod;
+			}
+			else if(x==1)
+			{
+				tree[i].lz[1]=tree[i].lz[1]*c%mod;
+				if(tree[i].lz[0]) tree[i].lz[0]=tree[i].lz[0]*c%mod;
+				tree[i].sum[0]=tree[i].sum[0]*c%mod;
+				tree[i].sum[1]=((c*c%mod)*tree[i].sum[1])%mod;
+				tree[i].sum[2]=(((c*c%mod)*c)%mod*tree[i].sum[2])%mod;
+			}
+			else if(x==0)
+			{
+				    tree[i].lz[0]=(tree[i].lz[0]+c)%mod;
+				tree[i].sum[2]=(tree[i].sum[2]+(tree[i].sum[1]+c*tree[i].sum[0]%mod)*3*c%mod+((((len*c)%mod)*c%mod)*c%mod))%mod;
+				tree[i].sum[1]=(tree[i].sum[1]+(tree[i].sum[0]*c%mod)*2%mod+(len*c%mod)*c%mod)%mod;
+				tree[i].sum[0]=(tree[i].sum[0]+c*len%mod)%mod;
+			
+			
+			}
+		return;
+	   }
+	   if(tree[i].l==tree[i].r) return;
+	   push_down(i,tree[i].r-tree[i].l+1);
+	  int mid=(tree[i].l+tree[i].r)>>1;
+	
+	   if(r<=mid) updata(i<<1,x,l,r,c);
+	   else if(l>mid) updata(i<<1|1,x,l,r,c);
+	   else
+	  {
+		updata(i<<1,x,l,mid,c);
+		updata(i<<1|1,x,mid+1,r,c);
+	  }
+		push_up(i);
+}
+ll search(int i,int l,int r,int p)
+{    //cout<<i<<" "<<l<<" "<<r<<" "<<p<<endl;
+	if(tree[i].l==l&&tree[i].r==r)
+	{   	//cout<<1<<endl;
+		return tree[i].sum[p]%mod;
+	}
+
+	push_down(i,tree[i].r-tree[i].l+1);
+	int mid=(tree[i].l+tree[i].r)>>1;
+	ll s=0;
+	if(r<=mid) s+=search(i<<1,l,r,p)%mod;
+	else if(l>mid) s+=search(i<<1|1,l,r,p)%mod;
+	else
+	{
+		s+=search(i<<1,l,mid,p)%mod;
+		s+=search(i<<1|1,mid+1,r,p)%mod;
+	}
+	
+	return s%mod;
+}
+int main()
+{
+	while(~scanf("%d %d",&n,&m))
+	{
+		if(n==0&&m==0) break;
+		build(1,1,n); 
+			int cao,x,y,z;
+			while(m--)
+			{
+				scanf("%d %d %d %d",&cao,&x,&y,&z);
+				//cout<<cao<<endl;
+				if(cao==4)
+				{
+					ll ans=search(1,x,y,z-1)%mod;
+					printf("%lld\n",ans);
+				}
+				else
+				{
+					updata(1,cao-1,x,y,z);
+				}
+			}
+	}
+	return 0;
+}

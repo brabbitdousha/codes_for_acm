@@ -1,0 +1,51 @@
+floyd≈–∂œ «∑Ò¡™Õ®
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<map>
+using namespace std;
+int flag,n,t;int s;
+int mmp[100][100];
+struct node
+{
+	string str,son;
+}e[111];
+map<string,int> num;
+void floyd()
+{
+	for(int k=1;k<=s;k++)
+	for(int i=1;i<=s;i++)
+	for(int j=1;j<=s;j++)
+	if(mmp[i][k]&&mmp[k][j])
+	mmp[i][j]=1;
+}
+int main()
+{
+	while(cin>>n)
+	{
+		memset(mmp,0,sizeof mmp);
+		s=flag=0;
+		num.clear();
+		for(int i=1;i<=n;i++)
+		{
+			getchar();
+			cin>>e[i].str>>e[i].son;
+			if(num[e[i].str]==0) num[e[i].str]=++s;
+			if(num[e[i].son]==0) num[e[i].son]=++s;
+		}
+		for(int i=1;i<=n;i++)
+		{
+			floyd();
+			if(mmp[num[e[i].son]][num[e[i].str]]==1)
+			{
+				
+				cout<<e[i].str<<" "<<e[i].son<<"\n";
+				flag=1;
+				break;
+			}
+			mmp[num[e[i].str]][num[e[i].son]]=1;
+		}
+		if(flag==0) printf("0\n");
+	}
+	return 0;
+}

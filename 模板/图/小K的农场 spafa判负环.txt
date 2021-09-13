@@ -1,0 +1,77 @@
+spfaÅĞ¸º»·
+#include<bits/stdc++.h>
+using namespace std;
+int read()
+{
+    int x=0;int f=1;char ch=getchar();
+    while(ch>'9'||ch<'0'){if(ch=='-'){f=-1;}ch=getchar();}
+    while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
+    return x*f;
+}
+#define N 10005
+struct node
+{
+    int to,next,v;
+}e[N<<1];
+int inE[N],inS[N];
+int sta[N];
+int head[N];int dis[N];int top;
+int cnt=0;
+void add(int x,int y,int z)
+{
+    e[cnt].to=y;
+    e[cnt].next=head[x];
+    e[cnt].v=z;
+    head[x]=cnt++;
+}
+int spfa()
+{
+    memset(dis,99,sizeof(dis));
+    dis[0]=0;
+    sta[++top]=0;
+    while(top)
+    {
+        int u=sta[top--];
+        inS[u]=0;
+        for(int i=head[u];i;i=e[i].next)
+        {      int v=e[i].to;
+            if(dis[v]>dis[u]+e[i].v)
+            {
+                if(inS[v]) return 0;
+                dis[v]=dis[u]+e[i].v;
+                sta[++top]=v;
+                inS[v]=1;
+            }
+        }
+    }
+    return 1;
+}
+int main()
+{
+    int n,m; memset(head,-1,sizeof(head));
+    n=read();m=read();
+    while(m--)
+    {
+        int p,a,b;
+        p=read(); a=read(); b=read();
+        if(p==3) {add(a,b,0); add(b,a,0);inE[a]=inE[b]=1;continue;}
+        int c; c=read();
+        if(p==2)
+        {
+            add(a,b,c);
+            inE[b]=1;
+        }
+        else
+        { 
+            add(b,a,-c);
+            inE[a]=1;
+        }
+    }
+    for(int i=1;i<=n;i++)
+    {
+        if(!inE[i]) add(0,i,0);
+    }
+    if(spfa()) printf("Yes\n");
+    else printf("No\n");
+    return 0;
+}

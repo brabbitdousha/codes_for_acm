@@ -1,0 +1,85 @@
+¶þ·ÖÍ¼È¾É«hdu5285
+#include<iostream>
+#include<queue>
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int maxn=100005;
+struct node
+{
+int to,next;
+}e[maxn<<1];
+int n,m,cnt,zero,one,head[maxn];
+int color[maxn];
+bool flag;
+void add(int x,int y)
+{
+	e[cnt].to=y;
+	e[cnt].next=head[x];
+	head[x]=cnt++;
+}
+void dfs(int u)
+{
+	for(int i=head[u];i!=-1;i=e[i].next)
+	{
+		int to=e[i].to;
+		if(color[u]==color[to]) flag=false;
+		if(color[to]!=-1) continue;
+		color[to]=color[u]^1;
+		if(color[to]==0) zero++;
+		else one++;
+		dfs(to);
+	}
+}
+int main()
+{ freopen("a.txt","r",stdin);
+    freopen("b.txt","w",stdout);
+	int t,u,v;
+	scanf("%d",&t);
+	while(t--)
+	{
+		cnt=0;
+		memset(head,-1,sizeof head);
+		memset(color,-1,sizeof color);
+		flag=true;
+		scanf("%d%d",&n,&m);
+		if(n<=1)
+		{
+			printf("Poor wyh\n");
+			continue;
+		}
+		if(m==0)
+		{
+			printf("%d 1\n",n-1);
+			continue;
+		}
+		for(int i=1;i<=m;i++)
+		{
+			scanf("%d%d",&u,&v);
+			add(u,v);
+			add(v,u);
+		}
+		int a=0,b=0;
+		for(int i=1;i<=n;i++)
+		{
+			if(color[i]==-1&&head[i]!=-1)
+			{
+				color[i]=0;
+				zero=1,one=0;
+				dfs(i);
+				a+=max(zero,one);
+				b+=min(zero,one);
+			}
+			else if(color[i]==-1&&head[i]==-1)
+			a++;
+		}
+		if(flag==false)
+		{
+			printf("Poor wyh\n");
+			continue;
+		}
+		printf("%d %d\n",a,b);
+	}
+	return 0;
+}

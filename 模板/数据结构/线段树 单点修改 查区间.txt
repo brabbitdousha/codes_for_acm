@@ -1,0 +1,66 @@
+线段树 单点修改 查区间
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<vector>
+#define ll long long
+using namespace std;
+int n,m;
+struct node
+{
+    int l,r;
+    ll sum;
+}tree[2000003];
+ll a[600000];
+inline void build(int i,int l,int r)
+{
+    tree[i].l=l;tree[i].r=r;
+    if(l==r) {
+        tree[i].sum=a[l];
+        return;
+    }
+    int mid=(l+r)>>1;
+    build(i*2,l,mid);
+    build(i*2+1,mid+1,r);
+    tree[i].sum=tree[i*2].sum+tree[i*2+1].sum;
+}
+inline int search(int i,int l,int r)
+{
+    if(tree[i].l>=l&&tree[i].r<=r) return tree[i].sum;
+    if(tree[i].r<l||tree[i].l>r) return 0;
+    int s=0;
+    if(tree[i*2].r>=l) s+=search(i*2,l,r);
+    if(tree[i*2+1].l<=r) s+=search(i*2+1,l,r);
+    return s;
+}
+inline void add(int i,int dis,int k)
+{
+    if(tree[i].l==tree[i].r)
+    {
+        tree[i].sum+=k;
+        return;
+    }
+    if(dis<=tree[i*2].r) add(i*2,dis,k);
+    else add(i*2+1,dis,k);
+    tree[i].sum=tree[i*2].sum+tree[i*2+1].sum;
+    return;
+}
+int main()
+{
+    scanf("%d %d",&n,&m);
+    for(int i=1;i<=n;i++) scanf("%lld",&a[i]);
+    build(1,1,n);
+    while(m--)
+    {
+        int k,x,y;
+        scanf("%d %d %d",&k,&x,&y);
+        if(k==1) {add(1,x,y);}
+        if(k==2)
+        { ll ans=search(1,x,y);
+        printf("%lld\n",ans);
+        }
+    }
+    return 0;
+}

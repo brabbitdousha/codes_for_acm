@@ -1,0 +1,57 @@
+拓展欧几里得
+两个青蛙的位置分别为(x+mt)mod L、(y+nt) mod L，相遇即是(x+mt)%L=(y+nt)%L，即(m-n)*t+k*L=y-x。
+已经符合ax+by=c的方程了，设a=m-n，b=L，c=y-x，
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+#include<queue>
+#include<cmath>
+#include<ctime>
+#define ll long long
+#define INF 0x3fffffff 
+using namespace std;
+ll exgcd(ll a,ll b,ll &x,ll &y)
+{
+	ll r,t;
+	if(!b)
+	{
+		x=1;
+		y=0;
+		return a;
+	}
+	r=exgcd(b,a%b,x,y);
+	t=x;
+	x=y;
+	y=t-a/b*y;
+	return r;
+}
+int main()
+{
+	ll x,y,m,n,l;
+	scanf("%lld %lld %lld %lld %lld",&x,&y,&m,&n,&l);
+	ll a=n-m;
+	ll c=x-y;
+	ll b=l;
+	if(a<0)
+	{
+		a=-a;
+		c=-c;
+	}
+	ll p=exgcd(a,b,x,y);
+	if(c%p!=0)
+	  printf("Impossible\n");
+	else
+	{
+		x=x*c/p;
+		ll t=b/p;
+		if(x>=0) x=x%t;
+		else
+		  x=x%t+t;
+		printf("%lld\n",x);
+	}
+	return 0;
+}

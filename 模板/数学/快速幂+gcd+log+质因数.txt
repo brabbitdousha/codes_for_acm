@@ -1,0 +1,40 @@
+快速幂+gcd+log+质因数
+long long power(long long x,long long y)
+{
+	long long ans=1;
+	for( ;y;y>>=1) {if(y&1) ans=ans*x%mod; x=x*x%mod;}
+   return ans;
+}
+
+int gcd(int x,int y)
+
+{
+    if(y==0) return x;
+	
+      else gcd(y,x%y);
+
+}
+ll int logi(ll int n,ll int b)
+{
+	ll int cnt=0;
+	while(n>1)
+	{
+		cnt++;
+		n=n/b;
+	}
+	return cnt;
+}
+cout<<logi(8,2)<<endl;//  值为3
+质因数
+vector<ll int> divi;
+	for(int i=2;i*i<=x;i++)
+	{
+		int cnt=0;
+		while(x%i==0)
+		{
+			x=x/i;
+			cnt=1;
+		}
+		if(cnt==1) divi.push_back(i);
+	}
+	if(x>1) divi.push_back(x);

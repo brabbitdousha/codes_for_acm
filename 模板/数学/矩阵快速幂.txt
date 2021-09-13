@@ -1,0 +1,81 @@
+¾ØÕó¿ìËÙÃÝ
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<stack>
+#include<cstdio>
+#include<vector>
+#include<bitset>
+#include<string>
+#include<cstdlib>
+#include<cstring>
+#include<fstream>
+#include<sstream>
+#include<iomanip>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define INF 0x3f3f3f3f //1061109567
+#define llINF 9223372036854775807
+#define pi 3.141592653589793
+#define ll long long
+using namespace std;
+const int mod=7;
+struct node
+{
+	int mat[15][15];
+}x,y;
+int n;
+node a;
+node mul(node x,node y)
+{
+	node tmp;
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<n;j++)
+		{    tmp.mat[i][j]=0;
+			for(int k=0;k<n;k++)
+			{
+				tmp.mat[i][j]+=(x.mat[i][k]*y.mat[k][j])%mod;
+			}
+			tmp.mat[i][j]=tmp.mat[i][j]%mod;
+		}
+	}
+	return tmp;
+}
+node ksm(node x,int num)
+{    node y;
+    for(int i=0;i<n;i++)
+    for(int j=0;j<n;j++)
+    if(i==j) y.mat[i][j]=1;
+    else y.mat[i][j]=0;
+	while(num)
+	{
+		if(num&1)
+		{
+			y=mul(y,x);
+		}
+		x=mul(x,x);
+		num=num>>1;
+	}
+	return y;
+}
+int main()
+{    n=2;
+	int a,b,c;
+	while(cin>>a>>b>>c&&a&&b&&c)
+	{
+		if(c==1||c==2) {printf("1\n");continue;}
+		node base; node now;
+		memset(base.mat,0,sizeof base);
+		base.mat[0][0]=a; base.mat[0][1]=b; base.mat[1][0]=1;
+		memset(now.mat,0,sizeof now);
+		now.mat[0][0]=1; now.mat[1][0]=1;
+		node ans=ksm(base,c-2);
+		ans=mul(ans,now);
+		cout<<ans.mat[0][0]<<endl;
+	}
+	
+	return 0;
+}

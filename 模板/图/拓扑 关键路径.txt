@@ -1,0 +1,104 @@
+ÍØÆË ¹Ø¼üÂ·¾¶
+#include<bits/stdc++.h>
+using namespace std;
+int T,n,m;
+void topsoft();
+int en=0;
+int head[30007];
+int ans[30007];
+int in[30007];
+int dis[30007];
+int d[30007];
+int G[30007];
+stack<int> sta;
+int anss=0;
+struct node
+{
+	int to,next;
+	int v;
+}e[100007];
+void add(int x,int y,int z)
+{
+	en++;
+	e[en].to=y;
+	e[en].v=z;
+	e[en].next=head[x];
+	head[x]=en;
+}
+void important_path()
+{   //cout<<"hh"<<endl;
+	for(int i=0;i<=n;i++) d[i]=anss;
+	while(!sta.empty())
+	{
+		int u=sta.top(); sta.pop();
+		for(int i=head[u];i!=-1;i=e[i].next)
+		{
+			int v=e[i].to;
+			int c=e[i].v;
+			if(d[u]>d[v]-c) d[u]=d[v]-c;
+		}
+	}
+	for(int i=1;i<=n;i++)
+	{
+		for(int ei=head[i];ei!=-1;ei=e[ei].next)
+		{
+			int v=e[ei].to;
+			if(dis[i]==d[v]-e[ei].v)
+			  printf("%d->%d\n",i,v);
+		}
+	}
+}
+int main()
+{   
+	
+		en=0;
+		memset(head,-1,sizeof head);
+		memset(ans,0,sizeof ans);
+		memset(in,0,sizeof in);
+		scanf("%d %d",&n,&m);
+		int a,b;
+		for(int i=1;i<=m;i++)
+		{  int u,v,w;
+		scanf("%d %d %d",&u,&v,&w);
+		 in[v]++;
+		 add(u,v,w);
+		   
+		}
+		topsoft();int flag=1;
+		for(int i=1;i<=n;i++)
+		{
+			if(in[i]) flag=0;
+		}
+		if(flag) {printf("%d\n",anss);important_path(); }else printf("0");
+	
+	return 0;
+}
+void topsoft()
+{   int ct=0;
+	priority_queue<int> que;
+	for(int i=1;i<=n;i++)
+	if(!in[i]) que.push(i);
+	while(!que.empty())
+	{
+		int now=que.top();
+		sta.push(now);
+		//printf("%d->",now);
+		ans[++ct]=now;
+		que.pop();
+		int i=head[now];
+		while(i!=-1)
+		{   dis[e[i].to]=max(dis[e[i].to],dis[now]+e[i].v);
+			in[e[i].to]--;
+			if(in[e[i].to]==0)
+			{que.push(e[i].to);
+			  //printf("%d\n",e[i].to);
+		    }
+			i=e[i].next;
+		}
+	}
+	//for(int i=1;i<=ct;i++) cout<<ans[i]<<" ";
+	//cout<<endl;
+	
+	for(int i=1;i<=n;i++) {anss=max(anss,dis[i]);}
+	
+}

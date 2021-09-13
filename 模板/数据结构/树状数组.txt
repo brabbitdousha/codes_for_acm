@@ -1,0 +1,79 @@
+Ê÷×´Êý×é
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+#include<queue>
+#include<cmath>
+#include<ctime>
+#define ll unsigned long long
+#define INF 0x3fffffff 
+using namespace std;
+const int MaxN=50005;
+int n,m;
+int a[MaxN];
+int c[MaxN];
+int lowbit(int x)
+{
+	return x&(-x);
+}
+void updata(int i,int k)
+{
+	while(i<=n)
+	{
+		c[i]+=k;
+		i+=lowbit(i);
+	}
+}
+int getsum(int i)
+{
+	int res=0;
+	while(i>0)
+	{
+		res+=c[i];
+		i-=lowbit(i);
+	}
+	return res;
+}
+int main()
+{
+	int t;
+	scanf("%d",&t);int kk=0;
+	while(t--)
+	{   
+		kk++;
+		printf("Case %d:\n",kk); 
+		memset(a,0,sizeof a);
+		memset(c,0,sizeof c);
+		scanf("%d",&n);
+		for(int i=1;i<=n;i++)
+		{
+			scanf("%d",&a[i]);
+			updata(i,a[i]);
+		}
+		string s;
+	   int x,y;
+	   while(cin>>s&&s[0]!='E')
+	   {
+	   	scanf("%d %d",&x,&y);
+	   	if(s[0]=='Q')
+	   	{
+	   		int sum=getsum(y)-getsum(x-1);
+	   		printf("%d\n",sum);
+	   	}
+	   	else if(s[0]=='A')
+	   	{
+	   		updata(x,y);
+	   	}
+	   	else if(s[0]=='S')
+	   	{
+	   		updata(x,-y);
+	   	}
+	   }
+    }
+    return 0;
+}
+	

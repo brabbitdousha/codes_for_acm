@@ -1,0 +1,20 @@
+N内多少个质数
+const int N=1000006;
+vector<int> prime;
+bool mark[N+5];//开int会MLE
+void goprime()
+{
+	memset(mark,0,sizeof mark);
+	prime.clear();
+	for(int i=2;i<=N;i++)
+	{
+		int tt=N/i;
+		for(int j=2;j<=tt;j++)
+		   mark[i*j]=1;
+	}
+	for(int i=2;i<=N;i++)
+	{
+		if(!mark[i])
+		prime.push_back(i);
+	}
+}

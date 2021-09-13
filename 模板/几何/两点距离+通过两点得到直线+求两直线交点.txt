@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+const int N=300;
+int cnt=0;
+const double INF=0x3fffffff;
+struct line
+{
+	double k;
+	double d;
+	double x;
+};
+line L[N];
+line res[N];
+line getline(double x1,double y1,double x2,double y2)
+{
+	line tmp;
+	if(x2==x1)
+	{
+		tmp.x=x2;
+		tmp.k=0.0;
+		tmp.d=0.0;
+	}
+	else
+	{
+		tmp.x=-1.0;
+		tmp.k=(y2-y1)/(x2-x1);
+		tmp.d=y1-tmp.k*x1;
+	}
+    return tmp;
+}
+struct node
+{
+	double x,y;
+}e[N];
+
+double dis(node a,node b)
+{   double x1=a.x;double y1=a.y;
+    double x2=b.x;double y2=b.y;
+	return sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+}
+node jiaodian(line a,line b)
+{  node tmp;
+	if((a.x==-1.0)&&(b.x!=-1.0))
+	{
+		tmp.x=b.x;
+		tmp.y=b.x*a.k+a.d;
+		return tmp;
+	}
+	if((a.x!=-1.0)&&(b.x==-1.0))
+	{
+		tmp.x=a.x;
+		tmp.y=a.x*b.k+b.d;
+	    return tmp;
+	}
+	if((a.x!=-1.0)&&(b.x!=-1.0))
+	{
+		tmp.x=-1.0;
+		tmp.y=-1.0;//（-1.0，-1.0）是没有交点
+		return tmp;
+	}
+	if(a.k==b.k)
+	{
+			tmp.x=-1.0;
+		tmp.y=-1.0;
+		return tmp;
+	}
+	tmp.x=(b.d-a.d)/(a.k-b.k);
+	tmp.y=tmp.x*a.k+a.d;
+	return tmp;
+}

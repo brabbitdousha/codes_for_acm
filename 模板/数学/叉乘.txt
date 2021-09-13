@@ -1,0 +1,9 @@
+
+如果 res<0，说明结果向量垂直于屏幕向里，也就是指向Z轴的负方向，P点在直线的下侧。
+如果res>0，说明结果向量垂直于屏幕向外，也就是指向Z轴的正方向，P点在直线的上侧。
+如果res=0，P点在直线上。
+然后就是把所有线段弄成同一个方向
+int chacheng(Point a,Point b,Point c)
+{
+	return (c.first-a.first)*(b.second-a.second)-(c.second-a.second)*(b.first-a.first)<=0;
+}

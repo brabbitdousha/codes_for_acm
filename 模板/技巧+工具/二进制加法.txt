@@ -1,0 +1,62 @@
+二进制加法
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<stack>
+#include<cstdio>
+#include<vector>
+#include<bitset>
+#include<string>
+#include<cstdlib>
+#include<cstring>
+#include<fstream>
+#include<sstream>
+#include<iomanip>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define INF 0x3f3f3f3f //1061109567
+#define llINF 9223372036854775807
+#define pi 3.141592653589793
+#define ll long long
+using namespace std;
+string doit(string a,string b)
+{
+	string ans="";
+	if(a.length()<b.length()) swap(a,b);
+	int res=0;
+	for(int i=0;i<b.length();i++)
+	{
+		ans+=(char)((a[i]-'0'+b[i]-'0'+res)%2+'0');
+		if(a[i]-'0'+b[i]-'0'+res>=2) res=1;
+		else res=0;
+	}
+	for(int i=b.length();i<a.length();i++)
+	{
+		ans+=(char)((a[i]-'0'+res)%2+'0');
+		if((a[i]-'0'+res)>=2) res=1;
+		else res=0;
+	}
+	int n=a.length();
+	if(res) {ans+=(char)(res+'0');}
+	return ans;	
+}		
+int main()
+{
+	string diyi="1";
+	string jia="111";
+	string ans=doit(diyi,jia);
+	int cnt=0;
+	int maxn=40;
+	for(int i=2;i<=maxn;i++)
+	{
+	 diyi=ans;
+	reverse(ans.begin(),ans.end());
+	cout<<ans<<endl;
+	if(ans.length()<=65) cnt++;
+	else break;
+    }
+    cout<<cnt;
+	return 0;
+}

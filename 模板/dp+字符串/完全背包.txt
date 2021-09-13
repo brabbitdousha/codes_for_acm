@@ -1,0 +1,17 @@
+ÍêÈ«±³°ü
+#include<iostream>
+using namespace std;
+int t,n;long long T[10005],V[10005],f[100005]={0};
+int main()
+{
+cin>>t>>n;
+for(int i=1;i<=n;i++)
+cin>>T[i]>>V[i];
+for(int i=1;i<=n;i++)
+for(int j=T[i];j<=t;j++)
+{
+    f[j]=max(f[j],f[j-T[i]]+V[i]);
+}
+cout<<f[t];
+return 0;
+}

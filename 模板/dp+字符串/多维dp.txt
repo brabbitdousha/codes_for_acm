@@ -1,0 +1,33 @@
+∂‡Œ¨dp
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int f[55][55][55][55]={0},p[55][55];
+int main()
+{
+	int n,m;int sum=-1;
+	cin>>n>>m;
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=m;j++)
+		{
+			scanf("%d",&p[i][j]);
+		}
+	}
+	for(int i=1;i<=n;i++)
+	for(int j=1;j<=m;j++)
+	for(int k=1;k<=n;k++)
+	for(int l=1;l<=m;l++)
+	{
+		sum=max(max(f[i-1][j][k-1][l],f[i][j-1][k][l-1]),max(f[i-1][j][k][l-1],f[i][j-1][k-1][l]));
+		if(i==k&&j==l)
+		{
+			f[i][j][k][l]+=sum+p[i][j];
+		}
+		else{
+			f[i][j][k][l]+=sum+p[i][j]+p[k][l];
+		}
+	}
+	cout<<f[n][m][n][m];
+	return 0;
+}

@@ -1,0 +1,92 @@
+LCA tarjan
+#include<bits/stdc++.h>
+using namespace std;
+int read()
+{
+	int x=0;int f=1;char ch=getchar();
+	while(ch<'0'||ch>'9'){if(ch=='-') f=-1;ch=getchar();}
+	while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
+	return x*f;
+}
+struct edge
+{
+	int to,next;
+}e[1000001];
+struct questions
+{
+	int to,next,same,num;
+	bool flag;
+	questions(){flag=false;}
+}q[1000001];
+bool b[500001];
+int head[500001],que[500001],father[500001];
+int n,m,s,nume=0,numq=0,ans[500001];
+void add_que(int x,int y,int k)
+{
+	q[++numq].to=y;
+	q[numq].same=numq+1;
+	q[numq].next=que[x];
+	q[numq].num=k;
+	que[x]=numq;
+	q[++numq].to=x;
+	q[numq].same=numq-1;
+	q[numq].next=que[y];
+	q[numq].num=k;
+	que[y]=numq;
+}
+void add_edge(int x,int y)
+{
+    e[++nume].to=y;
+    e[nume].next=head[x];
+    head[x]=nume;
+    e[++nume].to=x;
+    e[nume].next=head[y];
+    head[y]=nume;
+}
+int find(int x)
+{
+	if(father[x]!=x)
+	father[x]=find(father[x]);
+	return father[x];
+}
+void merge(int x,int y)
+{
+	father[find(y)]=find(x);
+}
+void LCA(int point,int f)
+{
+	for(int i=head[point];i;i=e[i].next)
+	if(e[i].to!=f&&!b[e[i].to])
+	{
+		LCA(e[i].to,point);
+		merge(point,e[i].to);
+		b[e[i].to]=1;
+	}
+	for(int i=que[point];i;i=q[i].next)
+	if(!q[i].flag&&b[q[i].to])
+	{
+		ans[q[i].num]=find(q[i].to);
+		q[i].flag=1;
+		q[q[i].same].flag=1;
+	}
+}
+int main()
+{
+	n=read();m=read();s=read();
+	for(int i=1,x,y;i<=n-1;i++)
+	{
+		father[i]=i;
+		x=read();y=read();
+		add_edge(x,y);
+	}
+	father[n]=n;
+	for(int i=1,x,y;i<=m;i++)
+	{
+		x=read();y=read();
+		add_que(x,y,i);
+	}
+	LCA(s,0);
+	for(int i=1;i<=m;i++)
+	printf("%d\n",ans[i]);
+	return 0;
+}

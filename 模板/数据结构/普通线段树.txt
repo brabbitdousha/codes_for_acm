@@ -1,0 +1,125 @@
+普通线段树
+改单点
+inline void add(int i,int dis,int k)
+{
+    if(tree[i].l==tree[i].r)
+    {
+        tree[i].sum+=k;
+        return;
+    }
+    if(dis<=tree[i*2].r) add(i*2,dis,k);
+    else add(i*2+1,dis,k);
+    tree[i].sum=tree[i*2].sum+tree[i*2+1].sum;
+    return;
+}
+
+找单点
+ll ans=0;
+void search(int i,int dis)
+{
+    ans+=tree[i].sum;
+    if(tree[i].l==tree[i].r) return;
+    if(dis<=tree[i*2].r) search(i*2,dis);
+    if(dis>=tree[i*2+1].l) search(i*2+1,dis);
+}
+
+区间改，区间求和
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<vector>
+#define ll long long
+using namespace std;
+const int p=571373;
+ll n,m;
+struct node
+{
+    ll l,r;
+    ll lz;
+    ll mlz;
+    ll sum;
+}tree[2000003];
+ll a[600000];
+inline void build(ll i,ll l,ll r)
+{   tree[i].lz=0;
+    tree[i].mlz=0;
+    tree[i].l=l;tree[i].r=r;
+    if(l==r) {
+        tree[i].sum=a[l];
+        return;
+    }
+    ll mid=(l+r)>>1;
+    build(i*2,l,mid);
+    build(i*2+1,mid+1,r);
+    tree[i].sum=(tree[i*2].sum+tree[i*2+1].sum);
+}
+void push_down(ll i)
+{
+    if(tree[i].lz!=0)
+    {
+        tree[i*2].lz+=tree[i].lz;
+        tree[i*2+1].lz+=tree[i].lz;
+        ll mid=(tree[i].l+tree[i].r)/2;
+        tree[i*2].sum+=tree[i].lz*(mid-tree[i*2].l+1);
+        tree[i*2+1].sum+=tree[i].lz*(tree[i*2+1].r-mid);
+        tree[i].lz=0;
+    }
+    return;
+}
+void add(ll i,ll l,ll r,ll k)
+{   ll mid=(tree[i].l+tree[i].r)>>1;
+     if(tree[i].r<l || tree[i].l>r)  return ;
+    if(tree[i].r==r&&tree[i].l==l)
+    {
+        tree[i].sum+=k*(tree[i].r-tree[i].l+1);
+        tree[i].lz+=k;
+        return;
+    }
+     push_down(i);
+    if(r<=mid)
+	{
+		add(i<<1,l,r,k);
+	}
+	else if(l>mid)
+	{
+		add(i<<1|1,l,r,k);
+	}
+	else
+	{
+		add(i<<1,l,mid,k);
+		add(i<<1|1,mid+1,r,k);
+	}
+    tree[i].sum=tree[i*2].sum+tree[i*2+1].sum;
+    return;
+}
+
+inline ll search(int i,int l,int r)
+{
+    if(tree[i].l>=l&&tree[i].r<=r) return tree[i].sum;
+    if(tree[i].r<l||tree[i].l>r) return 0;
+    push_down(i);
+    ll s=0;
+    if(tree[i*2].r>=l) s+=search(i*2,l,r);
+    if(tree[i*2+1].l<=r) s+=search(i*2+1,l,r);
+    return s;
+}
+
+int main()
+{
+    scanf("%lld %lld",&n,&m);
+    for(int i=1;i<=n;i++) scanf("%lld",&a[i]);
+    build(1,1,n);
+    while(m--)
+    {
+        ll k,x,y;
+        scanf("%lld %lld %lld",&k,&x,&y);
+        if(k==1) {ll num;scanf("%lld",&num);add(1,x,y,num);}
+        if(k==2)
+        { ll ans=search(1,x,y);
+        printf("%lld\n",ans);
+        }
+    }
+    return 0;
+}

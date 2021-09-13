@@ -1,0 +1,88 @@
+字符串相关
+ string的find函数
+int loc1=str.find("[");
+            num=0;
+            if(loc1!=-1)
+            {
+                int loc2=str.find("]");
+                for(int i=loc1+1;i<loc2;i++)
+                {
+                    num=num*10+s[i]-'0';
+                }
+            }
+            if(num)tmp*=num;
+            ans+=tmp;
+       }
+       ans=ceil((double)ans/1024);
+给一个范围，找一个数，每位数字都不同
+
+大佬的stl水平高啊。。顺便学一下stingstream
+头文件 
+//
+＃i nclude <iostream> 
+＃i nclude <sstream> 
+＃i nclude <string> 
+//
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fast ios::sync_with_stdio(0);cin.tie(),cout.tie()
+int main()
+{
+	fast;
+	int l,r,sz;
+	string str;
+	stringstream ss;
+	set<char> ch;
+	cin>>l>>r;
+	for(int i=l;i<=r;i++)
+	{
+		ss.clear();
+		ch.clear();
+		ss<<i;
+		ss>>str;
+		sz=str.size();
+		for(int j=0;j<sz;j++)
+		   ch.insert(str[j]);
+		   if(ch.size()==sz)
+		   {
+		   	cout<<i<<"\n";
+		   	return 0;
+		   }
+	}
+	cout<<-1<<"\n";
+	return 0;
+}
+在一个串里面找指定单词出现次数
+int main()
+{
+    string a;string b;
+   getline(cin,a);
+    getline(cin,b);
+    for(int i=0;i<a.length();i++){a[i]=tolower(a[i]);}
+    for(int i=0;i<b.length();i++){b[i]=tolower(b[i]);}
+    int ans=0;
+    a=' '+a+' ';b=' '+b+' ';
+    if(b.find(a)==string::npos)
+    {cout<<"-1";}
+    else {  
+    	   int f=b.find(a);int next=b.find(a);
+    	   while(next!=string::npos)
+    	   {  ++ans;
+    	   	  next=b.find(a,next+1);
+    	   	  
+    	   }
+         cout<<ans<<" "<<f;
+		 }
+		 return 0;
+}
+putchar()学习
+putchar(' ');
+for(int j=0;j<k;j++)
+putchar ("  ----- --"[c[i]-'0']);
+
+strcpy（x，y） 将y数组的值赋给x数组（仅限char）
+ strcat（x，y） x数组的值变为x数组后面紧跟y数组（仅限char）
+ strcmp（x，y） 比较2个数组，如果ASCII码表值不一样，值小的那个数组小，
+如果值都一样，长度不一样，短的小。如果x数组小于y，返回1，反之，返回-1，
+相等，返回0.（仅限char）

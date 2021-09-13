@@ -1,0 +1,66 @@
+spfa
+
+#include<bits/stdc++.h>
+using namespace std;
+int read()
+{
+	int x=0;int f=1;char ch=getchar();
+	while(ch>'9'||ch<'0'){if(ch=='-'){f=-1;}ch=getchar();}
+	while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
+	return x*f;
+}
+struct node
+{
+	int v,next,to;
+}e[500010];
+int head[11000];int vis[11000],dis[11000];
+int en=0;int T,C,TS,TE;
+void add(int x,int y,int z)
+{
+	en++;
+	e[en].to=y;
+	e[en].v=z;
+	e[en].next =head[x];
+	head[x]=en;
+}
+int main()
+{
+	T=read();
+	C=read();
+	TS=read();
+	TE=read();
+	memset(vis,0,sizeof vis);memset(dis,127,sizeof dis);
+	int a,b,c;
+	for(int i=1;i<=C;i++)
+	{ 
+	   a=read();b=read();c=read();
+	   add(a,b,c); add(b,a,c);
+    }
+    int start=TS;
+    queue<int> que;
+    que.push(start);
+    vis[start]=1; dis[start]=0;
+    while(!que.empty())
+    {
+    	int now=que.front();
+    	que.pop();
+    	int i=head[now];
+    	vis[now]=0;
+    	while(i)
+    	{
+    		if(dis[e[i].to]>dis[now]+e[i].v)
+    		{
+    			dis[e[i].to]=dis[now]+e[i].v;
+    			if(!vis[e[i].to])
+    			{
+    				vis[e[i].to]=1;
+    				que.push(e[i].to);
+    			}
+    		}
+    		i=e[i].next;
+    	}
+    }
+    printf("%d",dis[TE]);
+    return 0;
+}
+   

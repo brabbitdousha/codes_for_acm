@@ -1,0 +1,76 @@
+我们把路口看作顶点，把道路看作边的无向图。到某个顶点v的次短路要么是到其他某个顶点u的最短路再加上u到v的边，
+要么是到u的次短路再加上u到v的边，因此所需要求的就是到所有顶点的最短路和次短路。
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<iostream>
+#include<queue>
+#include<vector>
+using namespace std;
+const int maxn=100010,maxm=500010;
+const int inf=0x3fffffff;
+int dis[maxn],dis2[maxn];
+int n,m;
+struct node
+{
+	int pos;
+	int d;
+	bool operator < (const node &t) const
+	{
+		return t.d<d;
+	}
+};
+struct edge
+{
+	int to,cost;
+};
+vector<edge> e[maxm];
+inline void add(int x,int y,int z)
+{
+	e[x].push_back((edge) {y,z});
+}
+inline void dijkstra(int s)
+{
+	for(int i=0;i<=n;i++) dis[i]=dis2[i]=inf;
+	dis[s]=0;dis2[s]=inf;
+	priority_queue<node> que;
+	que.push((node) {s,0});
+	while(!que.empty())
+	{
+		node tmp=que.top();
+		que.pop();
+		int x=tmp.pos;int di=tmp.d;
+		if(di>dis2[x]) continue;
+		for(int i=0;i<e[x].size();i++)
+		{
+			int to=e[x][i].to;int cost=e[x][i].cost;
+			int w=cost+di;
+			if(w<dis[to])
+			{
+				swap(w,dis[to]);
+				que.push((node){to,dis[to]});
+			}
+			if(w<dis2[to]&&w>dis[to])
+			{
+				dis2[to]=w;
+				que.push((node){to,dis2[to]});
+			}
+		}
+	}
+}
+int main()
+{
+	while(scanf("%d %d",&n,&m)!=EOF)
+	{
+		int u,v,w;
+		for(int i=1;i<=m;i++)
+		{
+			scanf("%d %d %d",&u,&v,&w);
+			add(u,v,w);
+			add(v,u,w);
+		}
+		dijkstra(1);
+		printf("%d\n",dis2[n]);
+	}
+	return 0;
+}

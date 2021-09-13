@@ -1,0 +1,48 @@
+kmp
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+char a[1000010];
+char b[1002];
+int nextt[1002];
+void KMP(char *x,int *nextt)
+{
+	nextt[0]=-1; nextt[1]=0;
+	int len=strlen(x);
+	int i=1,j=0;
+	while(i<len&&j<len)
+	{
+		if(j==-1||x[i]==x[j]) nextt[++i]=++j;
+		else j=nextt[j];
+	}
+}
+int main()
+{
+	cin>>a>>b;
+	KMP(b,nextt);
+	int j=0;int i=0;
+	int len1=strlen(a);
+	int len2=strlen(b);
+	while(i<len1&&j<len2)
+	{
+		if(j==-1||a[i]==b[j]) {i++;j++;}
+		else
+		j=nextt[j];
+		if(j==len2) {cout<<i-j+1<<endl; j=nextt[j];}
+	}
+/*  len2为循环节长度,
+           for(int i=1;i<=len;i++)
+        {
+        	int len2=i-nextt[i];
+        	if(i!=len2&&i%len2==0)
+            printf("%d %d\n",i,i/len2);
+        }
+*/
+	for(int j=1;j<=len2;j++)
+	cout<<nextt[j]<<" ";
+	return 0;
+}
+	
+    ;
+	   
+}

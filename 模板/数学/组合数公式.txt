@@ -1,0 +1,22 @@
+线性组合数公式
+ll inv[300009];
+ll C(ll m,ll nn)
+{ 
+   inv[1]=1; 
+   for(int i=2;i<=300005;i++) inv[i]=((ll)(mod-mod/i)*(ll)inv[mod%i])%mod;
+   ll zhuhe=1;
+   for(int i=1;i<=nn;i++) zhuhe=(zhuhe*(ll)(m-i+1)%mod*inv[i])%mod;
+   return zhuhe;
+}//C(m,nn)
+
+ll C[2005][2005];
+	for(int i=0;i<2000;i++)
+	{
+		for(int j=0;j<=i;j++)
+		{
+			if(j==0) {c[i][j]=1;continue;}
+			if(i==j) {c[i][j]=1;continue;}
+			c[i][j]=(c[i-1][j-1]+c[i-1][j])%mod;
+		}
+	}
+	

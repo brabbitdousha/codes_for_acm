@@ -1,0 +1,60 @@
+求树的重心
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int maxn=1e5+100;
+vector<ll> g[maxn];
+ll siz[maxn],son[maxn];
+ll r1,r2,n;
+void dfs(ll u,ll f)
+{
+	siz[u]=1;
+	son[u]=0;
+	for(int i=0;i<g[u].size();i++)
+	{
+		ll to=g[u][i];
+		if(to==f) continue;
+		dfs(to,u);
+		siz[u]+=siz[to];
+		son[u]=max(son[u],siz[to]);
+	}
+	son[u]=max(son[u],n-siz[u]);
+	if((son[u]<<1)<=n) r2=r1,r1=u;
+}
+int main()
+{
+	int t;
+	scanf("%d",&t);
+	while(t--)
+	{
+		scanf("%d",&n);
+		for(int i=0;i<=n+10;i++) g[i].clear(),siz[i]=0,son[i]=0;
+		for(int i=1;i<n;i++)
+		{
+			ll u,v;
+			scanf("%lld %lld",&u,&v);
+			g[u].push_back(v);
+			g[v].push_back(u);
+		}
+		r1=r2=0;
+		dfs(1,0);
+		if(!r2)
+		{
+			ll r3=g[r1][0];
+			printf("%lld %lld\n",r1,r3);
+			printf("%lld %lld\n",r1,r3);
+		}
+		else
+		{
+			ll r3=r1;
+			for(ll i=0;i<g[r2].size();i++)
+			{
+				r3=g[r2][i];
+				if(r3!=r1) break;
+			}
+			cout<<r3<<" "<<r2<<"\n";
+			cout<<r3<<" "<<r1<<"\n";
+		}
+	}
+	return 0;
+}

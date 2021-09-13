@@ -1,0 +1,49 @@
+floyd
+#include<bits/stdc++.h>
+using namespace std;
+int read()
+{
+	int x=0;int f=1;char ch=getchar();
+	while(ch>'9'||ch<'0'){if(ch=='-'){f=-1;}ch=getchar();}
+	while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
+	return x*f;
+}
+int n,m;int k;
+int d[300][300];
+int t[300];
+int main()
+{
+	n=read();
+	m=read();
+	for(int i=0;i<=n;i++)
+	for(int j=0;j<=n;j++)
+	 d[i][j]=1e9;
+
+	for(int i=0;i<n;i++)
+	t[i]=read();int a,b,c;
+	for(int i=1;i<=m;i++)
+	{
+		a=read();b=read();c=read();
+		d[a][b]=c;
+		d[b][a]=c;
+	}
+	int p;
+	p=read();int ti;
+	for(int i=1;i<=p;i++)
+	{    
+		a=read();b=read(); ti=read();
+		if(t[a]>ti||t[b]>ti) {printf("-1\n");continue;}
+		for(;t[k]<=ti&&k<n;k++)
+		for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+		{  
+			if(d[i][j]>d[i][k]+d[k][j])
+			{
+				d[i][j]=d[i][k]+d[k][j];
+			}
+		}
+		if(d[a][b]==1e9) printf("-1\n");
+		else printf("%d\n",d[a][b]);
+	}
+	return 0;
+}

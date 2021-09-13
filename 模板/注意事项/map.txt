@@ -1,0 +1,10 @@
+map
+unordered_map<int, long long>::iterator iter = ex[i].begin();
+	for (iter; iter != ex[i].end(); iter++) {
+		qq[iter->first] += iter->second * visit[i];
+                                                              }
+
+这样可以遍历map
+map pair用法
+ map< pair<string,string> ,int >a;
+   if(a[make_pair(s1,s2)] == 0)

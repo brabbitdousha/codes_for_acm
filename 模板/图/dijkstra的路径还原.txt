@@ -1,0 +1,44 @@
+dijkstra的路径还原
+0
+dousha written 4周 ago
+
+用prev[j]来记录最短路上顶点j的前趋
+
+更新最短路的时候修改
+
+int prev[MAX_V];
+void dijkstra(int s)
+{
+fiil(d,d+v,INF);
+fill(used,used+V,false);
+fill(prev,prev+V,-1);
+d[s]=0;
+while(true)
+{
+int v=-1;
+for(int u=0;u<V;u++)
+{
+  if(!used[u]&&(v==-1||d[u]<d[v])) v=u;
+}
+if(v==-1) break;
+used[v]=true;
+for(int u=0;u<V;u++)
+{
+	if(d[u]>d[V]+cost[v][u])
+	{
+		if(d[u]>d[v]+cost[v][u])
+		{
+			d[u]=d[v]+cost[v][u];
+			prev[u]=v;
+		}
+	}
+}
+}
+vector<int> get_path(int t)
+{
+	vector<int> path;
+	for(;t!=-1;t=prev[t]) path.push_back(t);
+	reverse(path.begin(),path.end());
+	return path;
+}
+

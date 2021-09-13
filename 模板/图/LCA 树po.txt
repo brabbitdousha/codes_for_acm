@@ -1,0 +1,73 @@
+LCA tree
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+#include<ctime>
+using namespace std;
+struct node{int y,next;}e[201000];
+int n,m,len,z,a[201000],dep[201000],f[201000],top[201000],son[201000],size[201000];
+inline int read()
+{
+    int x=0,f=1;  char ch=getchar();
+    while(!isdigit(ch))  {if(ch=='-')  f=-1;  ch=getchar();}
+    while(isdigit(ch))  {x=x*10+ch-'0';  ch=getchar();}
+    return x*f;
+}
+void insert(int xx,int yy)
+{
+    e[++len].next=a[xx];
+    a[xx]=len;
+    e[len].y=yy;
+}
+void dfs1(int x)
+{
+    dep[x]=dep[f[x]]+1;  size[x]=1;
+    for(int i=a[x];i;i=e[i].next)
+    {
+        if(e[i].y!=f[x]&&!f[e[i].y])
+        {
+            f[e[i].y]=x;
+            dfs1(e[i].y);
+            size[x]+=size[e[i].y];
+            if(size[son[x]]<size[e[i].y])  son[x]=e[i].y;
+        }
+    }
+}
+void dfs2(int x)
+{
+    if(x==son[f[x]])  top[x]=top[f[x]];
+    else top[x]=x;
+    for(int i=a[x];i;i=e[i].next)  
+        if(f[e[i].y]==x)  dfs2(e[i].y);
+}
+int ask(int xx,int yy)
+{
+    while(top[xx]!=top[yy])
+    {
+        if(dep[top[xx]]>dep[top[yy]])  xx=f[top[xx]];
+        else yy=f[top[yy]];
+    }
+    if(dep[xx]<dep[yy])  return xx;
+    else return yy;
+}
+int main()
+{
+    n=read();  m=read();
+    for(int i=1;i<n;i++)
+    {
+        int xx=read(),yy=read();
+        insert(xx,yy);
+        insert(yy,xx);
+    }
+    dfs1(1);
+    dfs2(1);
+    for(int i=1;i<=m;i++)
+    {
+        int xx=read(),yy=read();
+        printf("%d\n",ask(xx,yy));
+    }
+    return 0;
+}

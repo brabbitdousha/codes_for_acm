@@ -1,0 +1,1 @@
+type *.txt > 1.cpp

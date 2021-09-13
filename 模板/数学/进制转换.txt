@@ -1,0 +1,17 @@
+½øÖÆ×ª»»
+#include<stdio.h>
+int main(void)
+{
+    int i=0,n,a[1000];int k;
+    scanf("%d",&n);
+    scanf("%d",&k);
+    while (n>0)
+    {
+        a[i]=n%k;
+        i=i+1;
+        n=n/k;
+    }  
+    for(i--;i>=0;i--)
+        printf("%d",a[i]);
+    return 0;
+}

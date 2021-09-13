@@ -1,0 +1,31 @@
+重载运算符和优先队列的问题
+
+using namespace std;
+struct node
+{
+    int x,y;
+    bool operator < (const node & a) const
+    {
+        return x<a.x;
+    }
+}k[100];
+priority_queue <node> q;
+int main()
+{
+    k[1].x=10,k[1].y=100; q.push(k[1]);
+    k[2].x=12,k[2].y=60; q.push(k[2]);
+    k[3].x=14,k[3].y=40; q.push(k[3]);
+    k[4].x=6,k[4].y=80; q.push(k[4]);
+    k[5].x=8,k[5].y=20; q.push(k[5]);
+    sort(k+1,k+1+5); 
+    for(int i=1;i<=5;i++) cout<<k[i].x<<" "<<k[i].y<<",";
+    cout<<endl; 
+    while(!q.empty())
+    {
+        node m=q.top(); q.pop();
+        printf("(%d,%d) ",m.x,m.y);
+    }
+}
+输出结果
+6 80,  8 20,   10 100,   12 60,   14 40,
+(14,40) (12,60) (10,100) (8,20) (6,80)

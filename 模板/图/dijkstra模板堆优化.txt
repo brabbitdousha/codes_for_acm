@@ -1,0 +1,89 @@
+dijkstraÄ£°å¶ÑÓÅ»¯
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<queue>
+#include<vector>
+#include<cmath>
+#define ll long long
+using namespace std;
+const int MaxN=100010,MaxM=500010;
+struct edge
+{
+	int to,v,next;
+};
+edge e[MaxM];
+int head[MaxN];
+int cnt;
+ll dis[MaxN];
+bool vis[MaxN];
+int n,m,s;
+inline void add(int x,int y,int z)
+{
+	e[cnt].v=z;
+	e[cnt].to=y;
+	e[cnt].next=head[x];
+	head[x]=cnt++;
+}
+struct node
+{
+	ll dis;
+	int pos;
+	bool operator <(const node &x)const
+	{
+		return x.dis<dis;
+	}
+};
+inline void dij()
+{   for(int i=0;i<=n+2;i++) {dis[i]=0x3fffffff;vis[i]=0;}
+	priority_queue<node> que;
+	dis[s]=0;
+	que.push((node){0,s});
+	while(!que.empty())
+	{
+		node tmp=que.top();
+		que.pop();
+		int x=tmp.pos;
+		if(vis[x]) continue;
+		vis[x]=1;
+		for(int i=head[x];i!=-1;i=e[i].next)
+		{
+			int to=e[i].to;
+			if(dis[to]>dis[x]+e[i].v)
+			{
+				dis[to]=dis[x]+e[i].v;
+				if(!vis[to])
+				{
+					que.push((node){dis[to],to});
+				}
+			}
+		}
+	}
+}
+int main()
+{
+	int t;  int kk=0;
+	scanf("%d",&t);
+	while(t--)
+	{   kk++;
+		scanf("%d %d",&n,&m);
+		cnt=0;
+		for(int i=0;i<=n+2;i++) {head[i]=-1;}
+	    for(int i=1;i<=m;i++)
+	    {
+	    	int u,v;
+	    	ll w;
+	    	scanf("%d %d %lld",&u,&v,&w);
+	    	add(u,v,w);
+	    	add(v,u,w);
+	    }
+	    s=1;
+	    dij();
+	    printf("Case %d: ",kk);
+	    if(dis[n]==0x3fffffff) printf("Impossible\n");
+	    else printf("%lld\n",dis[n]);
+	}
+	return 0;
+}

@@ -1,0 +1,77 @@
+tarjanÄ£°å
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+const int N=1e4+5;
+const int M=1e5+5;
+int n,m;
+vector<int> G[N];
+int dfn[N],low[N],tot;
+int ans;
+bool vis[N];
+stack<int> sta;
+void tarjan(int x)
+{
+	dfn[x]=low[x]=++tot;
+	sta.push(x);
+	vis[x]=1;
+	for(int i=0;i<G[x].size();i++)
+	{
+		int to=G[x][i];
+		if(!dfn[to])
+		{
+			tarjan(to);
+			low[x]=min(low[x],low[to]);
+		}
+		else if(vis[to])
+		{
+			low[x]=min(low[x],dfn[to]);
+		}
+	}
+	if(low[x]==dfn[x])
+	{
+		ans++;
+		while(1)
+		{
+			int now=sta.top();
+			sta.pop();
+			vis[now]=0;
+			if(now==x) break;
+		}
+	}
+}
+void init()
+{
+	tot=0;
+	ans=0;
+	memset(vis,0,sizeof vis);
+	memset(dfn,0,sizeof dfn);
+	memset(low,0,sizeof low);
+	while(!sta.empty())
+	{
+		sta.pop();
+	}
+	for(int i=0;i<=n;i++) G[i].clear();
+}
+int main()
+{
+	while(scanf("%d %d",&n,&m))
+	{
+		if(n==0&&m==0) break;
+		init();
+		int u,v;
+		for(int i=1;i<=m;i++)
+		{
+			scanf("%d %d",&u,&v);
+			G[u].push_back(v);
+		}
+		for(int i=1;i<=n;i++)
+		{
+			if(!dfn[i])
+			tarjan(i);
+		}
+		if(ans==1) printf("Yes\n");
+		else printf("No\n");
+	}
+	return 0;
+}

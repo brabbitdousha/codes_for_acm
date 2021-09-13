@@ -1,0 +1,9 @@
+vector<int> a;
+ 
+void Input() {
+	cin >> n >> s >> k; a.clear(); a.resize(k);
+	for (auto &z: a) cin >> z;
+}
+进a里面去了
+find(a.begin(), a.end(), s-i) == a.end()
+神奇

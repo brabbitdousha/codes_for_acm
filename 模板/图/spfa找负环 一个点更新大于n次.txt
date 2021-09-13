@@ -1,0 +1,78 @@
+spfa找负环 一个点更新大于n次
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<queue>
+#include<cstring> 
+using namespace std;
+int head[20007];
+int vis[20007],dis[20007];
+int cnt[20007];int n,m;
+int en=0;
+struct node
+{
+	int to,next,v;
+}e[60007];
+void add(int x,int y,int z)
+{
+	e[en].to=y;
+	e[en].v=z;
+	e[en].next=head[x];
+	head[x]=en++;
+}
+int spfa()
+{
+		queue<int> que;
+		int start=1;
+		que.push(start);
+		vis[start]=1;
+		dis[start]=0;
+		while(!que.empty())
+		{
+			int now=que.front();
+			que.pop();
+			vis[now]=0;
+			int i=head[now];
+			while(i!=-1)
+			{
+				if(dis[e[i].to]>dis[now]+e[i].v)
+				{
+					dis[e[i].to]=dis[now]+e[i].v;
+					cnt[e[i].to]++;
+					if(cnt[e[i].to]>n) return 1;
+					if(!vis[e[i].to])
+					{  vis[e[i].to]=1;
+						que.push(e[i].to);
+					}
+				}
+				i=e[i].next;
+			}
+		}
+		return 0;
+}
+int main()
+{
+	int t;
+	scanf("%d",&t);
+	while(t--)
+	{   memset(head,-1,sizeof head);
+	    memset(dis,127,sizeof dis);
+	    memset(cnt,0,sizeof cnt);
+	    memset(vis,0,sizeof vis);
+	
+		scanf("%d %d",&n,&m);
+		for(int i=1;i<=m;i++)
+		{
+			int a,b,c;
+			scanf("%d %d %d",&a,&b,&c);
+			add(a,b,c);
+			if(c>=0)
+			{
+				add(b,a,c);
+			}
+		}
+		if(spfa()) printf("YE5\n");
+		else printf("N0\n");
+	}
+	return 0;
+}

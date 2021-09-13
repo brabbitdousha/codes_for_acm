@@ -1,0 +1,29 @@
+01±³°ü
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int main()
+{
+ int f[1001][1001]={0}; int t[1001],v[1001];
+ int n,m;
+ scanf("%d%d",&n,&m);
+
+ for(int i=1;i<=m;i++)
+ {
+   cin>>t[i];
+   cin>>v[i];
+ }
+ for(int i=1;i<=m;i++)
+ {
+ 	for(int j=n;j>=1;j--)
+ 	{
+ 		if(t[i]>j){f[i][j]=f[i-1][j];}
+ 		else
+ 		{
+ 			f[i][j]=max(f[i-1][j],f[i-1][j-t[i]]+v[i]) ;
+ 		}
+ 	}
+ }
+ 	cout<<f[m][n];
+ 	return 0;
+}

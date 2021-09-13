@@ -1,0 +1,53 @@
+树状数组求逆序对
+#include<bits/stdc++.h>
+#define ll long long
+#define lowbit(x) x&(-x)
+using namespace std;
+const int maxn=5e5+100;
+ll a[maxn],tree[maxn],n;//注意如果数据过大 要离散化
+ll b[maxn]; 
+void add(ll x,ll d)
+{
+	while(x<=n)
+	{
+		tree[x]+=d;
+		x+=lowbit(x);
+	}
+}
+ll getsum(ll x)
+{
+	ll sum=0;
+	while(x>0)
+	{
+		sum+=tree[x];
+		x-=lowbit(x);
+	}
+	return sum;
+}
+bool cmp1(const int &x,const int &y)
+{
+	return b[x]<b[y];
+}
+int main()
+{
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++) 
+	{
+	 scanf("%lld",&b[i]);
+	 a[i]=b[i];
+    }
+    sort(b+1,b+1+n);
+    int tt=unique(b+1,b+1+n)-b-1;
+	ll res=0;
+	for(int i=1;i<=n;i++)
+	{  a[i]=lower_bound(b+1,b+1+tt,a[i])-b;
+	//cout<<a[i]<<" ";
+    } //cout<<endl;
+	for(ll i=1;i<=n;i++)
+	{
+		add(a[i],1);
+		res+=(i-getsum(a[i]));
+	}
+	cout<<res;
+	return 0;
+}
